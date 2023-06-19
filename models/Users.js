@@ -1,24 +1,25 @@
 import mongoose from "mongoose";
 
-const workoutSchema = new mongoose.Schema({
-    workout: String,
-    number: Number
-});
-
-const planSchema =  new mongoose.Schema({
-    dates:{
-        start: Date,
-        current: Date
+const userSchema = mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Please enter name']
     },
-    data:{
-        today: [{type:workoutSchema, default: undefined}],
-        sum: [{type:workoutSchema, default: undefined}]
+    email: {
+        type: String,
+        required: [true, 'Please enter email'],
+        unique: true,
+        lowercase: true,
+        validator: v => v.includes("@") === 1
+        //don't use findandsave as validator won't run, use User.find().save()
+    },
+    password: {
+        type: String,
+        required: [true, 'Please enter password']
     }
+},
+{
+    timestamps: true
+})
 
-});
-
-const userSchema = new mongoose.Schema({
-    plans : [{name: String, plan:planSchema}]
-});
-
-export default mongoose.model('Users', userSchema);
+export default mongoose.model("User", userSchema);

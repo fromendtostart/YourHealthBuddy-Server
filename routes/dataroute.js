@@ -1,13 +1,19 @@
 import Express from "express";
-import { getData, addData, updateData } from "../controllers/dataController.js";
+import { getData, addData, updateData, addPlan, fetchPlans } from "../controllers/dataController.js";
+import protect from "../middlewares/authMiddleware.js"
+
 
 const router = Express.Router()
 
-router.get('/', getData);
+router.get('/fetchplans', protect, fetchPlans);
 
-router.post('/', addData);
+router.get('/fetchdata', protect, getData);
 
-router.put('/:id', updateData);
+router.post('/add', protect, addData);
+
+router.post('/addPlan', protect, addPlan)
+
+router.put('/update', protect, updateData);
 
 
 

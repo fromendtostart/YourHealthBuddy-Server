@@ -49,13 +49,22 @@ const addData = asyncHandler (async (req, res) => {
     if(!req.body.plan){
         res.status(400)
     }
+    const result = await UserData.findOne({user : req.user.id})
+    if(!result)
+    {
+        const plan = await UserData.create({
+            plans: req.body.plan,
+            user: req.user.id
+        });
+        res.status(200).json(plan);
+    }
+    else
+    {
+        const updatedPlan = await UserData.findOneAndUpdate({user : req.user.id}, {$push: {plans : req.body.plan}}, {"new":true})
+        res.status(200).json(updatedPlan)
+    }
 
-    const plan = await UserData.create({
-        plans: req.body.plan,
-        user: req.user.id
-    })
-
-    res.status(200).json(plan)
+    
 })
 
 const addPlan = asyncHandler (async (req, res) => {

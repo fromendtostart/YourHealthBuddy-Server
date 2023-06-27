@@ -3,7 +3,7 @@ import Users from "../models/Users.js";
 import asyncHandler from "express-async-handler"
 
 // all async functions
-//choosing specific user by id and getting id from protect middleware
+//choosing specific user by id and getting id and "user" from protect middleware
 
 const fetchPlans = asyncHandler (async (req, res) => {
     if(!req.user)
@@ -80,4 +80,30 @@ const addPlan = asyncHandler (async (req, res) => {
     res.status(200).json(updatedPlan)
 })
 
-export {getData, updateData, addData, addPlan, fetchPlans}
+const fetchInsights = asyncHandler(async(req, res) => {
+    if(!req.user)
+    {
+        res.sendStatus(401)
+        throw new Error("User not found")
+    }
+    const plans = await UserData.find({user: req.user.id})
+    let bestWorkout = "";
+    let worstWorkout = "";
+    let min = 1000;
+    let max = -1;
+    const workingOn = plans[0].plans[0].plan.data.today;
+    for(let item of workingOn){
+        if(item.number>max){
+            max=item.number;
+            bestWorkout=item.workout;
+        }
+        if(item.number<min){
+            min=item.number;
+            worstWorkout=item.workout;
+        }
+        console.log(JSON.stringify(item));
+    }
+    res.status(200).json([bestWorkout, worstWorkout]);
+})
+
+export {getData, updateData, addData, addPlan, fetchPlans, fetchInsights}

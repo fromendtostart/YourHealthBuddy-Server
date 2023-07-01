@@ -38,8 +38,9 @@ const updateData = asyncHandler (async (req, res) => {
         throw new Error("Data not found")
     }
     let updatedPlan = await UserData.findOneAndUpdate({user : req.user.id, "plans.name" : req.body.plan.name}, {$set: {"plans.$.plan": req.body.plan.plan}}, {"new":true})
-    updatedPlan.calcSum(req.body.plan.name)
-    updatedPlan = await updatedPlan.save();
+    // updatedPlan.calcSum(req.body.plan.name)
+    // updatedPlan = await updatedPlan.save();
+    //handled sum at frontend
     res.status(200).json(updatedPlan)
     
 })
@@ -91,7 +92,7 @@ const fetchInsights = asyncHandler(async(req, res) => {
     let worstWorkout = "";
     let min = 1000;
     let max = -1;
-    const workingOn = plans[0].plans[0].plan.data.today;
+    const workingOn = plans[0].plans[plans.length-1].plan.data.today;
     for(let item of workingOn){
         if(item.number>max){
             max=item.number;

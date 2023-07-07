@@ -5,6 +5,7 @@ import cors from "cors";
 import connecttoDB from "./config/connecttoDB.js";
 import dataroute from "./routes/dataroute.js";
 import userroute from "./routes/userroute.js";
+import { rateLimiter } from "./middlewares/rateLimiterMiddleware.js";
 const port = process.env.PORT || 5000;
 
 const app = express();
@@ -18,6 +19,8 @@ app.use(cors(
     credentials: true}));
 
     //additional cors options for credentials
+
+// app.use(rateLimiter)
 
 const router = express.Router();
 

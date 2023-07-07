@@ -2,7 +2,6 @@ import Express from "express";
 import { getData, addData, updateData, addPlan, fetchPlans, fetchInsights } from "../controllers/dataController.js";
 import protect from "../middlewares/authMiddleware.js"
 
-
 const router = Express.Router()
 
 router.get('/fetchplans', protect, fetchPlans);
